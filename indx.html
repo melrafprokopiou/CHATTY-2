@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>το 6 παιδί</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #12121c;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  padding: 12px;
+  background: #0d0d14;
+  font-weight: bold;
+}
+
+.chat {
+  height: 80vh;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.msg {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+.user { background: #10a37f; margin-left: auto; }
+.bot { background: #2b2b3d; }
+
+.input {
+  display: flex;
+  padding: 10px;
+  background: #0d0d14;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+}
+
+button {
+  margin-left: 8px;
+  padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">👶 το 6 παιδί (10–30 words)</div>
+
+<div id="chat" class="chat"></div>
+
+<div class="input">
+  <input id="input" placeholder="ρώτα οτιδήποτε..." />
+  <button onclick="send()">Send</button>
+  <button onclick="clearChat()">Clear</button>
+</div>
+
+<script>
+
+const chat = document.getElementById("chat");
+
+// 💬 safe UI
+function add(text, cls){
+  if(!text || typeof text !== "string"){
+    text = "δεν κατάλαβα αλλά προσπαθώ σαν παιδί έξι χρονών";
+  }
+
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// 🧠 core generator (STRICT 10–30 WORDS)
+function generate(text){
+
+  const t = text.trim();
+
+  const replies = [
+    "είπες \"" + t + "\" και το σκέφτομαι σαν παιδί έξι χρονών που μαθαίνει τον κόσμο",
+    "αυτό που είπες με μπερδεύει λίγο αλλά το φαντάζομαι σαν παιχνίδι στο σχολείο",
+    "το ακούω και το συνδέω με διάλειμμα σχολείο και παιχνίδι με φίλους",
+    "προσπαθώ να το καταλάβω αλλά σκέφτομαι σαν παιδί που ακόμα μαθαίνει"
+  ];
+
+  let reply = replies[Math.floor(Math.random() * replies.length)];
+
+  // enforce 10–30 words
+  let words = reply.split(" ");
+
+  if(words.length < 10){
+    reply += " και αυτό με βοηθά να μαθαίνω περισσότερα κάθε μέρα.";
+  }
+
+  if(words.length > 30){
+    reply = words.slice(0, 30).join(" ");
+  }
+
+  return reply;
+}
+
+// 🤖 AI
+function ai(text){
+  return generate(text);
+}
+
+// 💬 send
+function send(){
+
+  const input = document.getElementById("input");
+  const text = input.value;
+
+  input.value = "";
+
+  if(!text || text.trim() === ""){
+    add("πες μου κάτι 👶", "bot");
+    return;
+  }
+
+  add(text, "user");
+
+  setTimeout(() => {
+    add(ai(text), "bot");
+  }, 150);
+}
+
+// 🧹 clear
+function clearChat(){
+  chat.innerHTML = "";
+}
+
+document.getElementById("input").addEventListener("keypress", e => {
+  if(e.key === "Enter") send();
+});
+
+</script>
+
+</body>
+</html>
